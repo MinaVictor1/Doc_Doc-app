@@ -1,4 +1,3 @@
-import 'package:flutter_advanced_omar_ahmed/core/routing/routes.dart';
 import 'package:flutter_advanced_omar_ahmed/feature/login/ui/login.dart';
 import 'package:flutter_advanced_omar_ahmed/feature/onboarding/onboarding.dart';
 import 'package:go_router/go_router.dart';
