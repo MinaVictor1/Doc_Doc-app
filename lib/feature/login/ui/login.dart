@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_omar_ahmed/core/theme/styles.dart';
 import 'package:flutter_advanced_omar_ahmed/core/widgets/app_text_button.dart';
-import 'package:flutter_advanced_omar_ahmed/core/widgets/app_text_form_fiels.dart';
+import 'package:flutter_advanced_omar_ahmed/feature/login/data/models/login_request_body.dart';
+import 'package:flutter_advanced_omar_ahmed/feature/login/logic/cubit/login_cubit.dart';
 import 'package:flutter_advanced_omar_ahmed/feature/login/ui/widgets/already_have_an_account.dart';
+import 'package:flutter_advanced_omar_ahmed/feature/login/ui/widgets/email_and_password.dart';
+import 'package:flutter_advanced_omar_ahmed/feature/login/ui/widgets/login_bloc_listener.dart';
 import 'package:flutter_advanced_omar_ahmed/feature/login/ui/widgets/terms_and_conditions.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  Key formKey = GlobalKey<FormState>();
-  bool isObscureText = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,51 +37,47 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 17,
                 ),
-                Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        const AppTextFormField(hintText: 'Email'),
-                        const SizedBox(height: 16),
-                        AppTextFormField(
-                          hintText: 'Password',
-                          isObscureText: isObscureText,
-                          suffixIcon: GestureDetector(
-                            onTap: () => setState(() {
-                              isObscureText = !isObscureText;
-                            }),
-                            child: Icon(isObscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        Align(
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: Text(
-                              'Forget Password',
-                              style: TextStyles.font14MainBlueMedium,
-                            )),
-                        const SizedBox(
-                          height: 41,
-                        ),
-                        AppTextButton(
-                            buttonText: 'Login',
-                            textStyle: TextStyles.font16WhiteSemiBold,
-                            onPressed: () {}),
-                        const SizedBox(height: 32),
-                        const TermsAndConditionsText(),
-                        const SizedBox(height: 24),
-                        const AlreadyHaveAccountText()
-                      ],
-                    ))
+                Column(
+                  children: [
+                    const EmailAndPassword(),
+                    Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: Text(
+                          'Forget Password',
+                          style: TextStyles.font14MainBlueMedium,
+                        )),
+                    const SizedBox(
+                      height: 41,
+                    ),
+                    AppTextButton(
+                        buttonText: 'Login',
+                        textStyle: TextStyles.font16WhiteSemiBold,
+                        onPressed: () {
+                          validateThenDoLogin(context);
+                        }),
+                    const SizedBox(height: 32),
+                    const TermsAndConditionsText(),
+                    const SizedBox(height: 24),
+                    const AlreadyHaveAccountText(),
+                    const LoginBlocListener()
+                  ],
+                )
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void validateThenDoLogin(BuildContext context) {
+    if (context.read<LoginCubit>().formKey.currentState!.validate()) {
+      context.read<LoginCubit>().emitLoginStates(
+            LoginRequestBody(
+              email: context.read<LoginCubit>().mailcontroller.text,
+              password: context.read<LoginCubit>().passcontroller.text,
+            ),
+          );
+    }
   }
 }

@@ -1,11 +1,13 @@
+import 'package:flutter_advanced_omar_ahmed/core/di/dependency_injection.dart';
+import 'package:flutter_advanced_omar_ahmed/core/routing/routes.dart';
+import 'package:flutter_advanced_omar_ahmed/feature/home/ui/home_screen.dart';
+import 'package:flutter_advanced_omar_ahmed/feature/login/logic/cubit/login_cubit.dart';
 import 'package:flutter_advanced_omar_ahmed/feature/login/ui/login.dart';
 import 'package:flutter_advanced_omar_ahmed/feature/onboarding/onboarding.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 abstract class Approute {
-  static const kHomeview = '/HomePage';
-  static const kBookDetailsView = '/BookDetailsView';
-  static const kSearchPage = '/SearchPage';
   static final router = GoRouter(
     routes: [
       GoRoute(
@@ -13,13 +15,16 @@ abstract class Approute {
         builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
-        path: kHomeview,
-        builder: (context, state) => const LoginScreen(),
+        path: Routes.kLoginScreen,
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<LoginCubit>(),
+          child: const LoginScreen(),
+        ),
       ),
-      // GoRoute(
-      //   path: kBookDetailsView,
-      //   builder: (context, state) => const BookDetailsView(),
-      // ),
+      GoRoute(
+        path: Routes.kHomeScreen,
+        builder: (context, state) => const HomeScreen(),
+      ),
       // GoRoute(
       //   path: kSearchPage,
       //   builder: (context, state) => const SearchPage(),
