@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_omar_ahmed/core/routing/app_router.dart';
 import 'package:flutter_advanced_omar_ahmed/core/routing/routes.dart';
 import 'package:flutter_advanced_omar_ahmed/core/theme/styles.dart';
 import 'package:go_router/go_router.dart';
